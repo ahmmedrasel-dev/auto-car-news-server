@@ -9,7 +9,7 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.wh888.mongodb.net/auto_news?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://rahmmedinfo:kpoeKDaX3PmvKgC3@cluster0.fb1bdmc.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -17,7 +17,7 @@ const client = new MongoClient(uri, {
 });
 
 const run = async () => {
-  // await client.connect();
+  await client.connect();
   console.log("Database connection established");
   try {
     const db = client.db("auto_news");
@@ -32,7 +32,7 @@ const run = async () => {
     // get specific news
     app.get("/news/:id", async (req, res) => {
       const id = req.params.id;
-      const news = await newsCollection.findOne({ _id: ObjectId(id) });
+      const news = await newsCollection.findOne({ _id: id });
       res.send({ status: true, message: "success", data: news });
     });
 
@@ -51,7 +51,7 @@ const run = async () => {
         return res.send({ status: true, message: "success", data: newses });
       }
       newses = await newsCollection
-        .find({ category: { $regex: name, $options: "i" } })
+        .find({ post_category: { $regex: name, $options: "i" } })
         .toArray();
       res.send({ status: true, message: "success", data: newses });
     });
