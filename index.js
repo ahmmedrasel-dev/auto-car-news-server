@@ -29,6 +29,13 @@ const run = async () => {
       res.send({ status: true, message: "success", data: allNews });
     });
 
+    // Insert News.
+     app.post('/api/post-news', async (req, res) => {
+       const news = req.body;
+       await newsCollection.insertOne(news);
+       res.send({ success: true, message: 'News Create Successfully!' })
+     })
+
     // get specific news
     app.get("/news/:id", async (req, res) => {
       const id = req.params.id;
